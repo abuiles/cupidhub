@@ -1,0 +1,16 @@
+<h1>CupidHub</h1>
+<% @hackers.each do |hacker| %>
+<h2>Hi <%= hacker.name %>. Following your followings, Sr.</h2>
+<ul>
+  <% hacker.followings.each do |guy, idx| %>
+    <li>
+
+      <a href="<%= guy.url %>">
+        <img src="<%= guy.avatar_url %>" width="20px"/>
+        <%= guy.login %>
+      </a>
+       = <%= idx %>
+    </li>
+  <% end %>
+</ul>
+<% end %>
