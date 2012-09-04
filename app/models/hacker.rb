@@ -1,6 +1,8 @@
 class Hacker < ActiveRecord::Base
   attr_accessible :github_user, :name
 
+  after_create :populate_neo4j
+
   def followings
     @followings ||= github.users.followers.following github_user
     @matches ||= matches @followings
@@ -32,6 +34,10 @@ class Hacker < ActiveRecord::Base
 
   def watched
     @watched ||= github.repos.watching.watched user: github_user
+  end
+
+  def populate_neo4j
+    puts "I should start populating neo4j"
   end
 
   private

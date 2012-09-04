@@ -7,6 +7,7 @@ gem "jquery-rails", "~> 2.1.1"
 gem "pg", "~> 0.14.1"
 
 gem "github_api", "~> 0.6.5"
+gem 'omniauth-github', :git => 'git://github.com/intridea/omniauth-github.git'
 
 gem "activeadmin", "~> 0.5.0"
 gem "meta_search",    '>= 1.1.0.pre'

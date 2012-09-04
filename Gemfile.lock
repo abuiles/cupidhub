@@ -1,3 +1,11 @@
+GIT
+  remote: git://github.com/intridea/omniauth-github.git
+  revision: 4c9caf9875360c93349d872e4697323bdf3e0e2d
+  specs:
+    omniauth-github (1.0.3)
+      omniauth (~> 1.0)
+      omniauth-oauth2 (~> 1.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -110,6 +118,12 @@ GEM
       jwt (~> 0.1.4)
       multi_json (~> 1.0)
       rack (~> 1.2)
+    omniauth (1.1.1)
+      hashie (~> 1.2)
+      rack
+    omniauth-oauth2 (1.1.0)
+      oauth2 (~> 0.8.0)
+      omniauth (~> 1.0)
     orm_adapter (0.4.0)
     pg (0.14.1)
     polyamorous (0.5.0)
@@ -173,6 +187,7 @@ DEPENDENCIES
   github_api (~> 0.6.5)
   jquery-rails (~> 2.1.1)
   meta_search (>= 1.1.0.pre)
+  omniauth-github!
   pg (~> 0.14.1)
   rails (= 3.2.8)
   sass-rails (~> 3.2.3)

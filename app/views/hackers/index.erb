@@ -1,5 +1,9 @@
 <h1>CupidHub</h1>
-<% @hackers.each do |hacker| %>
+<% if @hacker.present? %>
+  <h2>!! Hi <%= @hacker.name %> </h2>
+<% end %>
+
+<% @hackers.first(1).each do |hacker| %>
 <h2>Hi <%= hacker.name %>. Following your followings, Sr.</h2>
 <ul>
   <% hacker.followings.each do |guy, idx| %>
