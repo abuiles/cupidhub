@@ -74,7 +74,17 @@ class HackerSlurperJob
     to   = find_user_by_github_user(to.github_user)
     raise 'Hacker not found in create_following' unless from && to
 
-    neo.create_relationship('follows', from, to)
+    from = Neography::Node.load(from)
+    to   = Neography::Node.load(to)
+
+    neo.create_unique_relationship(
+      'follows_index',
+      'name',
+      "#{from.github_user}.#{to.github_user}",
+      "follows",
+      from,
+      to
+    )
   end
 
   def self.create_starred(from, to)
@@ -82,7 +92,18 @@ class HackerSlurperJob
     to   = find_repo_by_name(to.name)
     raise 'repo  not found in create_starred' unless from && to
 
-    neo.create_relationship('starred', from, to)
+    from = Neography::Node.load(from)
+    to   = Neography::Node.load(to)
+
+
+    neo.create_unique_relationship(
+      'starred_index',
+      'name',
+      "#{from.github_user}.#{to.name}",
+      'starred',
+      from,
+      to
+    )
   end
 
   def self.find_user_by_github_user(github_user)
