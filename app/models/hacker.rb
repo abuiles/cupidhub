@@ -5,9 +5,9 @@ class Hacker < ActiveRecord::Base
 
   def followings
     @followings ||= github.users.followers.following github_user
-    @matches ||= matches @followings
-    puts @matches
-    @matches
+    # @matches ||= matches @followings
+    # puts @matches
+    # @matches
   end
 
   def recommendations
