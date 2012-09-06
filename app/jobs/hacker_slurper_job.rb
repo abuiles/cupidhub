@@ -19,31 +19,37 @@ class HackerSlurperJob
     migrate_followers(hacker)
     migrate_starred(hacker)
 
-    hacker.followings.each do |follow|
-      follow = Hacker.new(github_user: follow.login)
+    hacker.followings.each_page do |page|
+      page.each do |follow|
+        follow = Hacker.new(github_user: follow.login, github_uid: follow.id)
 
-      migrate_followers(follow)
-      migrate_starred(follow)
+        migrate_followers(follow)
+        migrate_starred(follow)
+      end
     end
   end
 
   def self.migrate_followers(hacker)
-    hacker.followings.each do |follow|
-      follow = Hacker.new(github_user: follow.login)
-      create_hacker_node(follow)
-      create_following(from = hacker, to = follow)
+    hacker.followings.each_page do |page|
+      page.each do |follow|
+        follow = Hacker.new(github_user: follow.login, github_uid: follow.id)
+        create_hacker_node(follow)
+        create_following(from = hacker, to = follow)
+      end
     end
   end
 
   def self.migrate_starred(hacker)
-    hacker.watched.each do |repository|
-      create_repository(repository)
-      create_starred(from = hacker, to = repository)
+    hacker.watched.each_page do |page|
+      page.each do |repository|
+        create_repository(repository)
+        create_starred(from = hacker, to = repository)
+      end
     end
   end
 
   def self.create_hacker_node(hacker)
-    node = find_user_by_github_user(hacker.github_user)
+    node = find_user_by_github_uid(hacker.github_uid)
     return node.first if node.present?
 
     node = neo.create_node(
@@ -51,12 +57,12 @@ class HackerSlurperJob
       github_uid: hacker.github_uid
     )
 
-    neo.add_node_to_index('hackers', 'github_user', hacker.github_user, node)
+    neo.add_node_to_index("hackers", "github_uid", hacker.github_uid, node)
     node
   end
 
   def self.create_repository(repository)
-    node = find_repo_by_name(repository.name)
+    node = find_repo_by_github_id(repository.id)
     return node.first if node.present?
 
     node = neo.create_node(
@@ -65,22 +71,24 @@ class HackerSlurperJob
       repository_id: repository.id
     )
 
-    neo.add_node_to_index('repos', 'name', repository.name, node)
+    neo.add_node_to_index("repos", "id", repository.id, node)
     node
   end
 
   def self.create_following(from, to)
-    from = find_user_by_github_user(from.github_user)
-    to   = find_user_by_github_user(to.github_user)
-    raise 'Hacker not found in create_following' unless from && to
+    # puts "Creating follows #{from.github_user}-[:follows]->#{to.github_user}"
+    from = find_user_by_github_uid(from.github_uid)
+    to   = find_user_by_github_uid(to.github_uid)
+    raise "Hacker#{from.inspect} not found in create_following" unless from
+    raise "Hacker#{to.inspect} not found in create_following" unless to
 
     from = Neography::Node.load(from)
     to   = Neography::Node.load(to)
 
     neo.create_unique_relationship(
-      'follows_index',
-      'name',
-      "#{from.github_user}.#{to.github_user}",
+      "follows_index",
+      "github_id",
+      "#{from.github_uid}.#{to.github_uid}",
       "follows",
       from,
       to
@@ -88,29 +96,31 @@ class HackerSlurperJob
   end
 
   def self.create_starred(from, to)
-    from = find_user_by_github_user(from.github_user)
-    to   = find_repo_by_name(to.name)
-    raise 'repo  not found in create_starred' unless from && to
+    # puts "Creating starred #{from.github_user}-[:starred]->#{to.name}"
+    from = find_user_by_github_uid(from.github_uid)
+    to   = find_repo_by_github_id(to.id)
+    raise "user#{from.inspect} not found in create_starred" unless from
+    raise "repo#{to.inspect} not found in create_starred" unless to
 
     from = Neography::Node.load(from)
     to   = Neography::Node.load(to)
 
 
     neo.create_unique_relationship(
-      'starred_index',
-      'name',
-      "#{from.github_user}.#{to.name}",
-      'starred',
+      "starred_index",
+      "name",
+      "#{from.github_uid}.#{to.repository_id}",
+      "starred",
       from,
       to
     )
   end
 
-  def self.find_user_by_github_user(github_user)
-    neo.find_node_index('hackers', 'github_user', github_user).try(:first)
+  def self.find_user_by_github_uid(github_uid)
+    neo.find_node_index("hackers", "github_uid", github_uid).try(:first)
   end
 
-  def self.find_repo_by_name(name)
-    neo.find_node_index('repos', 'name', name).try(:first)
+  def self.find_repo_by_github_id(uid)
+    neo.find_node_index("repos", "id", uid).try(:first)
   end
 end
