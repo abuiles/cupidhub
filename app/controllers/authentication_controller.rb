@@ -14,7 +14,7 @@ class AuthenticationController < ApplicationController
   end
 
   def destroy
-    session[:user] = nil
+    session[:hacker] = nil
     reset_session
     render :ok
   end
