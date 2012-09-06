@@ -1,13 +1,10 @@
 class Hacker < ActiveRecord::Base
-  attr_accessible :github_user, :name
+  attr_accessible :github_user, :name, :github_token, :email, :image_url, :github_uid
 
   after_create :populate_neo4j
 
-  def followings
-    @followings ||= github.users.followers.following github_user
-    # @matches ||= matches @followings
-    # puts @matches
-    # @matches
+  def followings(options = { per_page: 50 })
+    github.users.followers.following(github_user, options)
   end
 
   def recommendations
@@ -32,8 +29,8 @@ class Hacker < ActiveRecord::Base
     @taste ||= watched.map(&:name)
   end
 
-  def watched
-    @watched ||= github.repos.watching.watched user: github_user
+  def watched(options = { per_page: 50 })
+    github.repos.watching.watched(options.merge(user: github_user))
   end
 
   def populate_neo4j
@@ -50,6 +47,6 @@ class Hacker < ActiveRecord::Base
   end
 
   def github
-    @github ||= Github.new
+    @github ||= Github.new oauth_token: github_token
   end
 end

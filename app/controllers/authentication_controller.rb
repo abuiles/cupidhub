@@ -6,7 +6,10 @@ class AuthenticationController < ApplicationController
     hacker = Hacker.where(github_uid: auth.uid).
       first_or_create(
         name: auth.info.name,
-        github_user: auth.info.nickname
+        github_user: auth.info.nickname,
+        github_token: auth.credentials.token,
+        email: auth.info.email,
+        image_url: auth.info.image
       )
 
     session[:hacker] = hacker
