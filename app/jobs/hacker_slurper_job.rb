@@ -20,8 +20,11 @@ class HackerSlurperJob
 
     hacker.followings.each_page do |page|
       page.each do |follow|
-        follow = Hacker.new(github_user: follow.login, github_uid: follow.id)
+        follow.github_uid = follow.id
 
+        next if count_connections(follow) > 0
+
+        follow = Hacker.new(github_user: follow.login, github_uid: follow.github_uid)
         migrate_followers(follow)
         migrate_starred(follow)
       end
@@ -96,7 +99,6 @@ class HackerSlurperJob
   end
 
   def self.create_starred(from, to)
-    # puts "Creating starred #{from.github_user}-[:starred]->#{to.name}"
     from = find_user_by_github_uid(from.github_uid)
     to   = find_repo_by_github_id(to.id)
     raise "user#{from.inspect} not found in create_starred" unless from
@@ -122,5 +124,11 @@ class HackerSlurperJob
 
   def self.find_repo_by_github_id(uid)
     neo.find_node_index("repos", "id", uid).try(:first)
+  end
+
+  def self.count_connections(hacker)
+    q = "START me=node:hackers(github_uid = '#{hacker.github_uid}') MATCH me-->(x) RETURN COUNT(x)"
+    response = neo.execute_query(q)
+    response["data"].flatten.first || 0
   end
 end
