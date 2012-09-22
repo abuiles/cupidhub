@@ -1,8 +1,7 @@
 class HackerSlurperJob
   def self.neo
-    @neo ||= Neography::Rest.new("http://localhost:7474")
+    @neo ||= Neography::Rest.new(ENV['NEO4J_URL'] || "http://localhost:7474")
   end
-
   #
   # Creates hacker in neo4j
   # Add followings to neo4j and add relationship of type :follows

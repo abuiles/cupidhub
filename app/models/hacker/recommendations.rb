@@ -1,6 +1,6 @@
 module Hacker::Recommendations
   def neo
-    @neo ||= Neography::Rest.new("http://localhost:7474")
+    @neo ||= Neography::Rest.new(ENV['NEO4J_URL'] || "http://localhost:7474")
   end
 
   def recommended_hackers
