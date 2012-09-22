@@ -19,7 +19,7 @@ class AuthenticationController < ApplicationController
   def destroy
     session[:hacker] = nil
     reset_session
-    render :ok
+    redirect_to root_url
   end
 
   def failure
