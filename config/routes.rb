@@ -6,5 +6,10 @@ Cupidhub::Application.routes.draw do
   ActiveAdmin.routes(self)
 
   devise_for :admin_users, ActiveAdmin::Devise.config
-  resources :hackers
+  resources :hackers do
+    member do
+      get 'recommended_hackers'
+      get 'recommended_projects'
+    end
+  end
 end

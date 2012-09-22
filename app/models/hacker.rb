@@ -1,4 +1,6 @@
 class Hacker < ActiveRecord::Base
+  include Hacker::Recommendations
+
   attr_accessible :github_user, :name, :github_token, :email, :image_url, :github_uid
 
   after_create :populate_neo4j
@@ -36,7 +38,6 @@ class Hacker < ActiveRecord::Base
   def populate_neo4j
     puts "I should start populating neo4j"
   end
-
   private
 
   def generate_recommendations

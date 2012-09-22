@@ -68,7 +68,8 @@ class HackerSlurperJob
     node = neo.create_node(
       html_url: repository.html_url,
       name: repository.name,
-      repository_id: repository.id
+      full_name: repository.full,
+      repository_id: repository.id,
     )
 
     neo.add_node_to_index("repos", "id", repository.id, node)
