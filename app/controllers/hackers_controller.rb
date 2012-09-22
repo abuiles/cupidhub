@@ -7,12 +7,14 @@ class HackersController < ApplicationController
   end
 
   def recommended_hackers
-    recommendations = current_user.recommended_hackers
+    user = Hacker.find_by_id!(params[:id])
+    recommendations = user.recommended_hackers
     respond_with recommendations
   end
 
   def recommended_projects
-    recommendations = current_user.recommended_projects
+    user = Hacker.find_by_id!(params[:id])
+    recommendations = user.recommended_projects
     respond_with recommendations
   end
 end
