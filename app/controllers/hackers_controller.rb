@@ -1,6 +1,6 @@
 class HackersController < ApplicationController
   def index
     @hackers = Hacker.all
-    @hacker  = session[:hacker] if session[:hacker]
+    @hacker  = current_user if current_user
   end
 end
