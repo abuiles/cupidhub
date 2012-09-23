@@ -29,6 +29,9 @@ class HackerSlurperJob
         migrate_starred(follow)
       end
     end
+
+    hacker.active = true
+    hacker.save
   end
 
   def self.migrate_followers(hacker)
