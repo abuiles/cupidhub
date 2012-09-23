@@ -15,7 +15,7 @@ class HackerSlurperJob
   #
   def self.perform(github_uid)
     hacker = Hacker.where(github_uid: github_uid).first
-    create_hacker_node(hacker)
+    create_hacker_node(hacker, hacker.github_profile)
 
     migrate_followers(hacker)
     migrate_starred(hacker)
@@ -38,9 +38,9 @@ class HackerSlurperJob
 
   def self.migrate_followers(hacker)
     hacker.followings.each_page do |page|
-      page.each do |follow|
-        follow = Hacker.new(github_user: follow.login, github_uid: follow.id)
-        create_hacker_node(follow)
+      page.each do |gb_profile|
+        follow = Hacker.new(github_user: gb_profile.login, github_uid: gb_profile.id)
+        create_hacker_node(follow, gb_profile)
         create_following(from = hacker, to = follow)
       end
     end
@@ -55,13 +55,18 @@ class HackerSlurperJob
     end
   end
 
-  def self.create_hacker_node(hacker)
+  def self.create_hacker_node(hacker, github_profile = {})
     node = find_user_by_github_uid(hacker.github_uid)
     return node.first if node.present?
 
     node = neo.create_node(
       github_user: hacker.github_user,
-      github_uid: hacker.github_uid
+      github_uid: hacker.github_uid,
+      hacker_id: hacker.id,
+      location: github_profile.location,
+      bio: github_profile.bio,
+      avatar_url: github_profile.avatar_url,
+      url: github_profile.url
     )
 
     neo.add_node_to_index("hackers", "github_uid", hacker.github_uid, node)
@@ -75,8 +80,12 @@ class HackerSlurperJob
     node = neo.create_node(
       html_url: repository.html_url,
       name: repository.name,
-      full_name: repository.full,
+      full_name: repository.full_name,
       repository_id: repository.id,
+      description: repository.description,
+      forks: repository.forks,
+      watchers: repository.watchers,
+      language: repository.language
     )
 
     neo.add_node_to_index("repos", "id", repository.id, node)
