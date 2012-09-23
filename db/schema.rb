@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120906042029) do
+ActiveRecord::Schema.define(:version => 20120923160829) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -49,12 +49,13 @@ ActiveRecord::Schema.define(:version => 20120906042029) do
   create_table "hackers", :force => true do |t|
     t.string   "name"
     t.string   "github_user"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
+    t.datetime "created_at",                      :null => false
+    t.datetime "updated_at",                      :null => false
     t.integer  "github_uid"
     t.string   "github_token"
     t.string   "email"
     t.string   "image_url"
+    t.boolean  "active",       :default => false
   end
 
   add_index "hackers", ["github_uid"], :name => "index_hackers_on_github_uid", :unique => true
