@@ -7,10 +7,9 @@ class HackersController < ApplicationController
     @hacker  = current_user if current_user.present?
   end
 
-    def recommended_hackers
+  def recommended_hackers
     user = Hacker.find_by_id!(params[:id])
     recommendations = user.recommended_hackers
-
     respond_with recommendations
   end
 
@@ -24,7 +23,7 @@ class HackersController < ApplicationController
   def hacker_similarity
     user   = Hacker.find_by_id!(params[:id])
     hacker = Hacker.find_by_id!(params[:hacker_id])
-    similarity = user.hacker_similarity(hacker)
+    similarity = user.hacker_similarity(hacker.github_uid)
 
     respond_with similarity
   end
