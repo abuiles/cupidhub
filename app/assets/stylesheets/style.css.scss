@@ -3,19 +3,24 @@ a {outline: none;}
 a:focus { outline: none;}
 .container{ min-height:100%;}
 .brand {padding-left: 25px;margin-top:0px;} 
-body { color: #333333; }
+body { color: #333333;}
 .navbar {height: 75px; background-color: #eaeaea; width:100%;} 
 .navbar-inner { height: 75px; margin-left:35px;}
 #whitespace {height: 10px; background-color: #fafbfd; width: 100%; position: fixed;top: 75px;}
 .container .nav-collapse {height: 75px;text-align:right;width: 960px;}
 .signout {text-align: right;} 
 #page_container {text-align: center;}
-#banner { height: 150px; width: 100%;background-color: #3F6E7C;}
+#box {text-align:left;margin-top:40px;}
+.feed_separator {height: 15px; width: 50px; background: #e72c2d; margin-top:5px;float: left;}
+.feeding_frenzy {font-size: 18px; margin-left: 10px;}
+.who_you_follow {width: 200px; border-right: solid 2px #eaeaea;}
+#banner { height: 150px; width: 100%;background-color: #3F6E7C;margin-top:30px;}
 .red_text {color: #e72c2d}
-.feed {text-align:left;}
+.feed {text-align:left; margin-top: 25px;}
 footer{margin-left:25px;}
-#stats {text-align: center; font-size: 20px; height: 100px; margin-top: 25px;
+#stats {text-align: center; font-size: 20px; height: 100px; margin-top: 35px;
         border-bottom: solid 2px #e6e6e6; width: 960px; }
 #stats .number {font-weight: bold; font-size: 32px;margin-left: 5px;margin-right: -5px;}
 #stats_text {margin-left:200px; margin-right: 100px;}
 .hacker_description {margin-left: 60px;margin-top: -50px;}
+.user_thumb {height: 80px; width: 80px;}

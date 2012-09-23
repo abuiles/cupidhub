@@ -1,16 +1,17 @@
 <div id="page_container">
   <div id="box">
+<% image_tag('middleflow.png') %> 
     <div id="stats">
       <span id="stats_text">
-        <span class="red_text">YOUR STATS </span> 
-        <span class="number"> 3 </span> MATCHES 
-        <span class="number"> 20 </span> NEW FOLLOWS 
-        <span class="number"> 5 </span> PROJECTS
+        <span class="red_text">NEW ALERTS </span> 
+        <span class="number"> 3 </span> DEV MATCHES 
+        <span class="number"> 5 </span> PROJECT MATCHES
+        <span class="number"> 20 </span> FOLLOWS 
       </span>
-      <img src="<%= @hacker.image_url %>" width="75px"/>
+      <span class="user_thumb"><img src="<%= @hacker.image_url %>" width="75px"/></span>
     </div>
-    <div class="feed_separator"></div> <span class="feeding_frenzy">feeding frenzy</span>
-    <div class="feed">
+    <p><div class="feed_separator"></div><span class="feeding_frenzy">who you follow</span></p>
+    <div class="who_you_follow">
       <% @hackers.first(1).each do |hacker| %>
         <ul class="unstyled">
           <% hacker.followings.each do |guy, idx| %>
@@ -22,6 +23,7 @@
             </a>
             <%= idx %>
             </li>
+            <br />
           <% end %>
         </ul>
       <% end %>
