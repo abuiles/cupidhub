@@ -13,6 +13,7 @@ gem "activeadmin", "~> 0.5.0"
 gem "meta_search",    '>= 1.1.0.pre'
 
 gem "neography", "~> 0.0.30"
+gem "twitter-bootstrap-rails"
 
 # gem "newrelic_rpm", "~> 3.4.1"
 
