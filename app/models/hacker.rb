@@ -9,6 +9,10 @@ class Hacker < ActiveRecord::Base
     github.users.followers.following(github_user, options)
   end
 
+  def github_profile
+    github.users.get
+  end
+
   def recommendations
     @recommendations ||= generate_recommendations
   end
