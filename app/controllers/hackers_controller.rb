@@ -1,5 +1,5 @@
 class HackersController < ApplicationController
-  respond_to :json, only: [:recommended_hackers, :recommended_projects]
+  respond_to :json, only: [:recommended_hackers, :recommended_projects, :hacker_similarity]
 
   def index
     @hackers = Hacker.all
@@ -9,12 +9,22 @@ class HackersController < ApplicationController
   def recommended_hackers
     user = Hacker.find_by_id!(params[:id])
     recommendations = user.recommended_hackers
+
     respond_with recommendations
   end
 
   def recommended_projects
     user = Hacker.find_by_id!(params[:id])
     recommendations = user.recommended_projects
+
     respond_with recommendations
+  end
+
+  def hacker_similarity
+    user   = Hacker.find_by_id!(params[:id])
+    hacker = Hacker.find_by_id!(params[:hacker_id])
+    similarity = user.hacker_similarity(hacker)
+
+    respond_with similarity
   end
 end

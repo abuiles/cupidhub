@@ -126,8 +126,12 @@ class HackerSlurperJob
     neo.find_node_index("repos", "id", uid).try(:first)
   end
 
-  def self.count_connections(hacker)
-    q = "START me=node:hackers(github_uid = '#{hacker.github_uid}') MATCH me-->(x) RETURN COUNT(x)"
+  def self.count_connections(hacker, type = nil)
+    if type.present?
+      q =  "START me=node:hackers(github_uid = '#{hacker.github_uid}') MATCH me-[:#{type}]->(x) RETURN COUNT(x)"
+    else
+      q =  "START me=node:hackers(github_uid = '#{hacker.github_uid}') MATCH me-->(x) RETURN COUNT(x)"
+    end
     response = neo.execute_query(q)
     response["data"].flatten.first || 0
   end

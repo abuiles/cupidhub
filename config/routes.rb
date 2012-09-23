@@ -10,6 +10,7 @@ Cupidhub::Application.routes.draw do
     member do
       get 'recommended_hackers'
       get 'recommended_projects'
+      get 'hacker_similarity'
     end
   end
 end
