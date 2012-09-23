@@ -12,9 +12,8 @@
     </div>
     <p><div class="feed_separator"></div><span class="feeding_frenzy">who you follow</span></p>
     <div class="who_you_follow">
-      <% @hackers.first(1).each do |hacker| %>
         <ul class="unstyled">
-          <% hacker.followings.each do |guy, idx| %>
+          <% @hacker.followings.each do |guy, idx| %>
             <li>
             <a href="<%= guy.url %>">
               <img src="<%= guy.avatar_url %>" width="50px"/>
@@ -26,7 +25,6 @@
             <br />
           <% end %>
         </ul>
-      <% end %>
     </div>
   </div>
 </div>
