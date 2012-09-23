@@ -1,24 +1,26 @@
 <div id="page_container">
   <div id="box">
-<% image_tag('middleflow.png') %> 
+   <% image_tag('middleflow.png') %>
     <div id="stats">
       <span id="stats_text">
-        <span class="red_text">NEW ALERTS </span> 
-        <span class="number"> 3 </span> DEV MATCHES 
+        <span class="red_text">NEW ALERTS </span>
+        <span class="number"> 3 </span> DEV MATCHES
         <span class="number"> 5 </span> PROJECT MATCHES
-        <span class="number"> 20 </span> FOLLOWS 
+        <span class="number"> 20 </span> FOLLOWS
       </span>
       <span class="user_thumb"><img src="<%= @hacker.image_url %>" width="75px"/></span>
     </div>
     <p><div class="feed_separator"></div><span class="feeding_frenzy">who you follow</span></p>
-    <div class="who_you_follow">
+    <div class="row">
+
+    <div class="who_you_follow span3">
         <ul class="unstyled">
           <% @hacker.followings.each do |guy, idx| %>
             <li>
             <a href="<%= guy.url %>">
               <img src="<%= guy.avatar_url %>" width="50px"/>
               <p class="hacker_description"><%= link_to guy.login, guy.url %><br />
-              New York, NY</p>
+               </p>
             </a>
             <%= idx %>
             </li>
@@ -26,5 +28,42 @@
           <% end %>
         </ul>
     </div>
+
+   <div class="who_you_follow span3">
+        <ul class="unstyled">
+          <% @hacker.recommended_hackers.each do |name, data| %>
+            <li>
+            <a href="http://github.com/<%= data["htlm_url"]%>">
+              <img src="<%= data["avatar_url"] || '#' %>" width="50px"/>
+              <p class="hacker_description"><%= link_to name, "http://github.com/#{name}" %> <br />
+               </p>
+
+            </a>
+               <%= data["similarity"].values.max %> %
+            </li>
+            <br />
+          <% end %>
+        </ul>
+    </div>
+
+   <div class="who_you_follow span3">
+        <ul class="unstyled">
+          <% @hacker.recommended_projects.each do |name, data| %>
+            <li>
+            <a href="<%= data["htlm_url"]%>">
+              <p class="hacker_description"><%= name %> <br />
+               </p>
+               <p class="hacker_description">Follow by <%= data["score"] %> <%= pluralize(data["score"], 'friend') %> <br />
+               </p>
+
+            </a>
+            </li>
+            <br />
+          <% end %>
+        </ul>
+    </div>
+
+    </div>
+
   </div>
 </div>

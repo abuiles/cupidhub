@@ -1,6 +1,6 @@
 module Hacker::Recommendations
   def neo
-    @neo ||= Neography::Rest.new(ENV['NEO4J_URL'] || "http://3c8a20964:812228c44@e3e239aa5.hosted.neo4j.org:7790")
+    @neo ||= Neography::Rest.new(ENV['NEO4J_URL'] || "http://localhost:7474")
   end
 
   def hacker_similarity(github_uid)
@@ -19,15 +19,17 @@ module Hacker::Recommendations
 
   def recommended_hackers
     response = neo.execute_query(recommended_hacker_query)
-    return {} unless response["data"].present?
+    return {} unless (response["data"].present? rescue false)
 
     # follows_count = HackerSlurperJob.count_connections(self, 'follows')
 
     recommendations = Hash.new{ |hsh, key| hsh[key] = {} }
-    response["data"].each do |hacker, score, uid|
+    response["data"].each do |hacker, score, uid, url, avatar_url|
       # recommendations[hacker]["score"] = (score / follows_count.to_f).round(2) * 100
       recommendations[hacker]["score"] = score
       recommendations[hacker]["github_uid"] = uid
+      recommendations[hacker]["url"] = url
+      recommendations[hacker]["avatar_url"] = avatar_url
     end
     recommendations.delete(self.github_user)
 
@@ -72,7 +74,7 @@ module Hacker::Recommendations
       START me=node:hackers(github_uid ='#{self.github_uid}')
       MATCH me-[:follows*2..2]-follow_of_follow
       WHERE not(me-[:follows]-follow_of_follow)
-      RETURN follow_of_follow.github_user, COUNT(*), follow_of_follow.github_uid
+      RETURN follow_of_follow.github_user, COUNT(*), follow_of_follow.github_uid, follow_of_follow.url, follow_of_follow.avatar_url
       ORDER BY COUNT(*) DESC, follow_of_follow.github_user
       LIMIT #{limit}
     }

@@ -5,6 +5,9 @@ class HackersController < ApplicationController
   def index
     @hackers = Hacker.all
     @hacker  = current_user if current_user.present?
+    if @hacker
+      @hacker = Hacker.find_by_id @hacker.id
+    end
   end
 
   def recommended_hackers
