@@ -1,20 +1,30 @@
-<h1>CupidHub</h1>
-<% if @hacker.present? %>
-  <h2>!! Hi <%= @hacker.name %> </h2>
-<% end %>
-
-<% @hackers.first(1).each do |hacker| %>
-<h2>Hi <%= hacker.name %>. Following your followings, Sr.</h2>
-<ul>
-  <% hacker.followings.each do |guy, idx| %>
-    <li>
-
-      <a href="<%= guy.url %>">
-        <img src="<%= guy.avatar_url %>" width="20px"/>
-        <%= guy.login %>
-      </a>
-      = <%= idx %>
-    </li>
-  <% end %>
-</ul>
-<% end %>
+<div id="page_container">
+  <div id="box">
+    <div id="stats">
+      <span id="stats_text">
+        <span class="red_text">YOUR STATS </span> 
+        <span class="number"> 3 </span> MATCHES 
+        <span class="number"> 20 </span> NEW FOLLOWS 
+        <span class="number"> 5 </span> PROJECTS
+      </span>
+      <img src="<%= @hacker.image_url %>" width="75px"/>
+    </div>
+    <div class="feed_separator"></div> <span class="feeding_frenzy">feeding frenzy</span>
+    <div class="feed">
+      <% @hackers.first(1).each do |hacker| %>
+        <ul class="unstyled">
+          <% hacker.followings.each do |guy, idx| %>
+            <li>
+            <a href="<%= guy.url %>">
+              <img src="<%= guy.avatar_url %>" width="50px"/>
+              <p class="hacker_description"><%= link_to guy.login, guy.url %><br />
+              New York, NY</p>
+            </a>
+            <%= idx %>
+            </li>
+          <% end %>
+        </ul>
+      <% end %>
+    </div>
+  </div>
+</div>

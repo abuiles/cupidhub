@@ -1,4 +1,5 @@
 Cupidhub::Application.routes.draw do
+  root :to => 'landing_page#index'
   get '/auth/:provider/callback' => 'authentication#create'
   get "/auth/:provider/failure" => 'authentication#failure'
   get '/auth/destroy' => "authentication#destroy"
