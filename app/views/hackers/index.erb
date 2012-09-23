@@ -10,7 +10,16 @@
       </span>
       <span class="user_thumb"><img src="<%= @hacker.image_url %>" width="75px"/></span>
     </div>
-    <p><div class="feed_separator"></div><span class="feeding_frenzy">who you follow</span></p>
+
+    <div class="content-wrapper" style="margin-left: 20;margin-left: 247px;">
+    <div class="row" style="margin-bottom: 20px">
+      <div class="span4"></div>
+      <div class="span3"><div class="feed_separator"></div><span class="feeding_frenzy">who
+      you follow</span></div>
+
+      <div class="span3" style="margin-left: -38px"><div class="feed_separator"></div><span class="feeding_frenzy">recommended devs</span></div>
+      <div class="span3" style="margin-left: -38px"><div class="feed_separator"></div><span class="feeding_frenzy">recommended repos</span></div>
+    </div>
     <div class="row">
 
     <div class="who_you_follow span3">
@@ -35,25 +44,25 @@
             <li>
             <a href="http://github.com/<%= data["htlm_url"]%>">
               <img src="<%= data["avatar_url"] || '#' %>" width="50px"/>
-              <p class="hacker_description"><%= link_to name, "http://github.com/#{name}" %> <br />
+              <p class="hacker_description"><%= link_to "#{name}",
+              "http://github.com/#{name}" %>
+              <%= data["similarity"].values.max.to_i %> % <br />
                </p>
 
             </a>
-               <%= data["similarity"].values.max %> %
             </li>
             <br />
           <% end %>
         </ul>
     </div>
 
-   <div class="who_you_follow span3">
+<div class="who_you_follow span3">
         <ul class="unstyled">
           <% @hacker.recommended_projects.each do |name, data| %>
             <li>
-            <a href="<%= data["htlm_url"]%>">
+            <a href="<%= data["html_url"]%>">
+              <img src="https://secure.gravatar.com/avatar/b2f30beb8b11c4b20cb64585e50a9561?s=140&d=https://a248.e.akamai.net/assets.github.com%2Fimages%2Fgravatars%2Fgravatar-org-420.png" width="50px"/>
               <p class="hacker_description"><%= name %> <br />
-               </p>
-               <p class="hacker_description">Follow by <%= data["score"] %> <%= pluralize(data["score"], 'friend') %> <br />
                </p>
 
             </a>
@@ -63,7 +72,14 @@
         </ul>
     </div>
 
+
+
     </div>
 
+
+    </div>
   </div>
 </div>
+
+
+http://localhost:3000/hackers
